@@ -1,9 +1,8 @@
 /**
  * General Grunt setup
  */
-"use strict";
-
 module.exports = function(grunt) {
+  "use strict";
 
   // Displays the elapsed execution time of grunt tasks
   require('time-grunt')(grunt);
@@ -40,7 +39,7 @@ module.exports = function(grunt) {
        */
       app: {
         base: "app",
-        components: "<%= app.base %>/components"
+        components: "<%= app.base %>/components",
         scripts: "<%= app.base %>/scripts",
         styles: "<%= app.base %>/styles",
         templates: "<%= app.base %>/templates"
@@ -109,6 +108,38 @@ module.exports = function(grunt) {
       }
     },
 
-
+    /**
+     * Git commands for grunt.
+     *
+     * @url https://github.com/rubenv/grunt-git
+     */
+    gitclone: {
+      bootstrap: {
+        options: {
+          repository: "https://github.com/twbs/bootstrap.git",
+          directory: "tmp/bootstrap"
+        }
+      },
+      fontawesome: {
+        options: {
+          repository: 'https://github.com/FortAwesome/Font-Awesome.git',
+          directory: 'tmp/fontawesome'
+        }
+      },
+      owlcarousel: {
+        options: {
+          repository: "https://github.com/OwlFonk/OwlCarousel.git",
+          directory: "tmp/owlcarousel"
+        }
+      },
+      swipebox: {
+        options: {
+          repository: "https://github.com/brutaldesign/swipebox.git",
+          directory: "tmp/swipebox"
+        }
+      }
+    },
   });
-}
+
+  grunt.registerTask( 'default', [ 'less', 'cssmin', 'jshint', 'gitclone' ] );
+};
