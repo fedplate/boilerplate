@@ -76,6 +76,22 @@ module.exports = function(grunt) {
       }
     },
 
+    /**
+     * Minify CSS
+     *
+     * @url https://github.com/gruntjs/grunt-contrib-cssmin
+     */
+    cssmin: {
+      options: {
+        keepSpecialComments: 1
+      },
+      compress: {
+        files: {
+          '<%= .project.dist.styles %>/style.min.css': '<%= .project.dist.styles %>/style.css'
+        }
+      }
+    },
+
 
   });
 }
