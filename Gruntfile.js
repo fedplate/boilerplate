@@ -65,7 +65,7 @@ module.exports = function(grunt) {
       options: {
         banner: '<%= .project.banner %>'
       },
-      development: {
+      build: {
         options: {
           paths: ['<%= .project.app.styles %>'],
           yuicompress: false
@@ -85,9 +85,26 @@ module.exports = function(grunt) {
       options: {
         keepSpecialComments: 1
       },
-      compress: {
+      build: {
         files: {
           '<%= .project.dist.styles %>/style.min.css': '<%= .project.dist.styles %>/style.css'
+        }
+      }
+    },
+
+    /**
+     * Validate files with JSHint
+     *
+     * @url https://github.com/gruntjs/grunt-contrib-jshint
+     */
+    jshint: {
+      options: {
+        jshintrc: '<%= .project.app.scripts %>/.jshintrc',
+        force: true
+      },
+      build: {
+        files: {
+          src: ['<%= .project.app.scripts %>/**/*.js']
         }
       }
     },
