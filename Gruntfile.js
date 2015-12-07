@@ -39,19 +39,19 @@ module.exports = function(grunt) {
        */
       app: {
         base: "app",
-        components: "<%= app.base %>/components",
-        scripts: "<%= app.base %>/scripts",
-        styles: "<%= app.base %>/styles",
-        templates: "<%= app.base %>/templates"
+        components: "<%= project.app.base %>/components",
+        scripts: "<%= project.app.base %>/scripts",
+        styles: "<%= project.app.base %>/styles",
+        templates: "<%= project.app.base %>/templates"
       },
       build: {
         base: "build"
       },
       dist: {
         base: "dist",
-        scripts: "<% dist.base %>/scripts",
-        styles: "<% dist.base %>/styles",
-        templates: "<% dist.base %>"
+        scripts: "<% project.dist.base %>/scripts",
+        styles: "<% project.dist.base %>/styles",
+        templates: "<% project.dist.base %>"
       }
     },
 
@@ -62,15 +62,15 @@ module.exports = function(grunt) {
      */
     less: {
       options: {
-        banner: '<%= .project.banner %>'
+        banner: '<%= project.banner %>'
       },
       build: {
         options: {
-          paths: ['<%= .project.app.styles %>'],
+          paths: ['<%= project.app.styles %>'],
           yuicompress: false
         },
         files: {
-          '<%= .project.dist.styles %>/style.css': '<%= .project.app.styles %>/style.less'
+          '<%= project.dist.styles %>/style.css': '<%= project.app.styles %>/style.less'
         }
       }
     },
@@ -86,7 +86,7 @@ module.exports = function(grunt) {
       },
       build: {
         files: {
-          '<%= .project.dist.styles %>/style.min.css': '<%= .project.dist.styles %>/style.css'
+          '<%= project.dist.styles %>/style.min.css': '<%= project.dist.styles %>/style.css'
         }
       }
     },
@@ -98,12 +98,12 @@ module.exports = function(grunt) {
      */
     jshint: {
       options: {
-        jshintrc: '<%= .project.app.scripts %>/.jshintrc',
+        jshintrc: '<%= project.app.scripts %>/.jshintrc',
         force: true
       },
       build: {
         files: {
-          src: ['<%= .project.app.scripts %>/**/*.js']
+          src: ['<%= project.app.scripts %>/**/*.js']
         }
       }
     },
@@ -139,7 +139,91 @@ module.exports = function(grunt) {
         }
       }
     },
+
+    /**
+     * Copy files and folders.
+     *
+     * @url https://github.com/gruntjs/grunt-contrib-copy
+     */
+    copy: {
+      bootstrap: {
+        files: [
+          {
+            expand: true,
+            cwd: 'tmp/bootstrap/less/',
+            src: ['**'],
+            dest: '<%= project.app.components %>/bootstrap/less/'
+          },
+          {
+            expand: true,
+            cwd: 'tmp/bootstrap/js/',
+            src: ['**'],
+            dest: '<%= project.app.components %>/bootstrap/js/'
+          }
+        ]
+      },
+      fontawesome: {
+        files: [
+          {
+            expand: true,
+            cwd: 'tmp/fontawesome/fonts/',
+            src: ['**', '!FontAwesome.otf'],
+            dest: '<%= project.dist.base %>/fonts/'
+          },
+          {
+            expand: true,
+            cwd: 'tmp/fontawesome/less/',
+            src: ['**'],
+            dest: '<%= project.app.components %>/fontawesome/less/'
+          }
+        ]
+      },
+      owlcarousel: {
+        files: [
+          {
+            expand: true,
+            cwd: 'tmp/owlcarousel/owl-carousel/',
+            src: ['AjaxLoader.gif', 'grabbing.png'],
+            dest: '<%= project.dist.base %>/images/'
+          },
+          {
+            expand: true,
+            cwd: 'tmp/owlcarousel/owl-carousel/',
+            src: ['owl.carousel.css', 'owl.theme.css', 'owl.transitions.css'],
+            dest: '<%= project.app.components %>/owlcarousel/css/'
+          },
+          {
+            expand: true,
+            cwd: 'tmp/owlcarousel/owl-carousel/',
+            src: ['owl.carousel.js', 'owl.carousel.min.js'],
+            dest: '<%= project.app.components %>/owlcarousel/js/'
+          }
+        ]
+      },
+      swipebox: {
+        files: [
+          {
+            expand: true,
+            cwd: 'tmp/swipebox/src/css',
+            src: ['swipebox.css'],
+            dest: '<%= project.app.components %>/swipebox/css/'
+          },
+          {
+            expand: true,
+            cwd: 'tmp/swipebox/src/img',
+            src: ['**'],
+            dest: '<%= project.dist.base %>/images/'
+          },
+          {
+            expand: true,
+            cwd: 'tmp/swipebox/src/js',
+            src: ['**'],
+            dest: '<%= project.app.components %>/swipebox/js/'
+          }
+        ]
+      }
+    }
   });
 
-  grunt.registerTask( 'default', [ 'less', 'cssmin', 'jshint', 'gitclone' ] );
+  grunt.registerTask('default', ['less', 'cssmin', 'jshint', 'gitclone', 'copy']);
 };
